@@ -1,10 +1,52 @@
-
 // TODO: DEFINE ANY VARIABLES HERE
-
+var pressed = "";
+var total = 0;
+var divi = false;
+var mult = false;
+var minus = false;
+var plus = false;
+var begin = true;
+var test = "";
 
 
 // TODO: DEFINE YOUR FUNCTIONS HERE
+function newTotal() {
+    if (divi) {
+        total = divide(total, parseFloat(pressed));
+    } else if (mult) {
+        total = multiply(total, parseFloat(pressed));
+    } else if (minus) {
+        total = subtract(parseFloat(pressed), total);
+    } else if (plus) {
+        total = add(total, parseFloat(pressed));
 
+    }
+    updateDisplay(total);
+};
+
+function divide(val1, val2) {
+    val1 = parseFloat(val1);
+    val2 = parseFloat(val2);
+    return val1 / val2;
+}
+
+function multiply(val1, val2) {
+    val1 = parseFloat(val1);
+    val2 = parseFloat(val2);
+    return val1 * val2;
+}
+
+function subtract(val1, val2) {
+    val1 = parseFloat(val1);
+    val2 = parseFloat(val2);
+    return val2 - val1;
+}
+
+function add(val1, val2) {
+    val1 = parseFloat(val1);
+    val2 = parseFloat(val2);
+    return val1 + val2;
+}
 
 
 /**
@@ -16,9 +58,91 @@
  * @param  {String} buttonValue   The value of the button that was clicked on, for example "6" or "+"
  */
 function handleButtonClick(buttonValue) {
+    switch (buttonValue) {
+        case "/":
+            if (begin == true) {
+                total = parseFloat(pressed);
+                updateDisplay(pressed);
+                begin = false;
+                divi = true;
+            } else {
+                newTotal();
+                divi = true;
+                mult = false;
+                minus = false;
+                plus = false;
+            }
+            pressed = "";
+            break;
+        case "x":
+            if (begin == true) {
+                total = parseFloat(pressed);
+                updateDisplay(pressed);
+                begin = false;
+                mult = true;
+            } else {
+                newTotal();
+                divi = false;
+                mult = true;
+                minus = false;
+                plus = false;
+            }
+            pressed = "";
+            break;
+        case "+":
+            if (begin == true) {
+                total = parseFloat(pressed);
+                updateDisplay(pressed);
+                begin = false;
+                plus = true;
+            } else {
+                newTotal();
+                divi = false;
+                mult = false;
+                minus = false;
+                plus = true;
+            }
+            pressed = "";
+            break;
+        case "-":
+            if (begin == true) {
+                total = parseFloat(pressed);
+                updateDisplay(pressed);
+                begin = false;
+                minus = true;
+            } else {
+                newTotal();
+                divi = false;
+                mult = false;
+                minus = true;
+                plus = false;
+
+            }
+            pressed = "";
+            break;
+        case "=":
+            newTotal();
+            divi = false;
+            mult = false;
+            minus = false;
+            plus = false;
+            break;
+        case "clear":
+            pressed = "";
+            total = 0;
+            begin = true;
+            updateDisplay("");
+            break;
+        default:
+            pressed += buttonValue;
+            updateDisplay(pressed);
+    }
 
     // TODO: WRITE SOME OF YOUR CODE HERE
-
+    console.log("pressed; " + pressed);
+    console.log("total; " + total);
+    console.log("test" + typeof total);
+    console.log("divi: " + divi + " mult: " + mult + " plus: " + plus + " minus: " + minus);
 }
 
 
@@ -107,7 +231,7 @@ document.querySelector('.run-tests').addEventListener('click', function() {
         console.log('All tests have run. (If you see no errors, they all passed!)');
         updateDisplay('');
 
-    } catch(e) {
+    } catch (e) {
         console.error('There was a syntax error during the test run:', e);
     }
 });
@@ -127,6 +251,7 @@ document.querySelector('.run-tests').addEventListener('click', function() {
 });
 
 var display = document.querySelector('.display figure');
+
 function updateDisplay(text) {
     display.innerText = text;
 }
